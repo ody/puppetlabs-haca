@@ -35,11 +35,6 @@
 #
 # Copyright 2011 Your name here, unless otherwise noted.
 #
-class haca {
+class haca::secondary {
 
-  if $::cluster_primary == $::clientcert }
-    include haca::primary
-  } else
-    include haca::secondary
-  }
 }
