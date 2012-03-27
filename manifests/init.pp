@@ -37,7 +37,7 @@
 #
 class haca {
 
-  if $::cluster_primary == $::clientcert }
+  if $::cluster_primary == $::clientcert {
     include haca::primary
   } else
     include haca::secondary
