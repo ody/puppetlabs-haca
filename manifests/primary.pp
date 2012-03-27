@@ -55,7 +55,7 @@ class haca::primary {
 
   # Install and enable Corosync configuration for VIP and Apache management.
   class { 'corosync':
-    enable_secauth    => true
+    enable_secauth    => true,
     bind_address      => '0.0.0.0',
     multicast_address => '239.1.1.2',
   }
