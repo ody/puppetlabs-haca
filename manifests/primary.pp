@@ -90,7 +90,7 @@ class haca::primary {
     primitive_class => 'lsb',
     primitive_type  => 'pe-httpd',
     provided_by     => 'heartbeat',
-    operations      => { 'monitor' => '10s' },
+    operations      => { 'monitor' => { 'interval' => '10s' } },
     require         => Cs_primitive['ca_vip'],
   }
   cs_colocation { 'vip_ca_service':
