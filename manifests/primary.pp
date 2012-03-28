@@ -72,10 +72,6 @@ class haca::primary {
     value => 'false',
     require => Corosync::Service['pacemaker'],
   }
-  cs_property { 'resource-stickiness':
-    value => '100',
-    require => Corosync::Service['pacemaker'],
-  }
 
   cs_primitive { 'ca_vip':
     primitive_class => 'ocf',
