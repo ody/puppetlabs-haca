@@ -82,7 +82,7 @@ class haca::primary {
     primitive_type  => 'IPaddr2',
     provided_by     => 'heartbeat',
     parameters      => { 'ip' => '172.16.210.100', 'cidr_netmask' => '32' },
-    operations      => { 'monitor' => '30s' },
+    operations      => { 'monitor' => { 'interval' => '30s' } },
   }
   # I really really wished we used symlinks a la debian in PE so a could more
   # easily select what I wanted to run on a specific machine.
