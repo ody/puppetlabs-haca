@@ -64,7 +64,7 @@ class haca::primary {
     notify  => Service['corosync'],
   }
 
-  cs_property { 'no-quorum_policy':
+  cs_property { 'no-quorum-policy':
     value => 'ignore',
     require => Corosync::Service['pacemaker'],
   }
