@@ -65,13 +65,14 @@ class haca::primary {
   }
 
   cs_property { 'stonith-enabled':
-    value => 'false',
+    value   => 'false',
     require => Corosync::Service['pacemaker'],
-  } ->
+  }
 
   cs_property { 'no-quorum-policy':
-    value => 'ignore',
+    value   => 'ignore',
     require => Corosync::Service['pacemaker'],
+    before  => Cs_property['stonith-enabled'],
   }
 
   cs_primitive { 'ca_vip':
