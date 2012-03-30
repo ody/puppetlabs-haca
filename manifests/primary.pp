@@ -72,8 +72,9 @@ class haca::primary {
   cs_property { 'no-quorum-policy':
     value   => 'ignore',
     require => Corosync::Service['pacemaker'],
-    before  => Cs_property['stonith-enabled'],
   }
+
+  Cs_primitive { metadata => { 'resource-stickiness' => '100' } }
 
   cs_primitive { 'ca_vip':
     primitive_class => 'ocf',
