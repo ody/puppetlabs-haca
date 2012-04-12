@@ -99,6 +99,7 @@ class haca::primary {
     primitive_type  => 'ppk',
     provided_by     => 'pacemaker',
     operations      => { 'monitor' => { 'interval' => '30s' } },
+    metadata        => { 'target-role' => 'Master' },
   }
 
   cs_colocation { 'vip_ca_service':
