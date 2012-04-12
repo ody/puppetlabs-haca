@@ -92,6 +92,15 @@ class haca::primary {
     operations      => { 'monitor' => { 'interval' => '10s' } },
     require         => Cs_primitive['ca_vip'],
   }
+
+  # This is mostly a dummy primitive that kicks puppet for us.
+  cs_primitive { 'the_kicker':
+    primitive_class => 'ocf',
+    primitive_type  => 'ppk',
+    provided_by     => 'pacemaker',
+    operations      => { 'monitor' => { 'interval' => '30s' } },
+  }
+
   cs_colocation { 'vip_ca_service':
     primitives => [ 'ca_vip', 'pe_ca_service' ],
     require    => Cs_primitive[[ 'pe_ca_service', 'ca_vip' ]],
