@@ -69,7 +69,7 @@ class haca::primary {
     command     => 'sleep 3',
     path        => ['/bin', '/usr/bin' ],
     refreshonly => true,
-    subscribe   => Cs_property['stonith-enabled'],
+    subscribe   => Cs_property['no-quorum-policy'],
   }
 
   cs_property { 'stonith-enabled':
