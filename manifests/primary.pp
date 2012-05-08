@@ -94,7 +94,10 @@ class haca::primary {
     primitive_type  => 'ppk',
     provided_by     => 'pacemaker',
     operations      => { 'monitor' => { 'interval' => '30s' } },
-    metadata        => { 'target-role' => 'Master' },
+    metadata        => {
+      'target-role'         => 'Master',
+      'resource-stickiness' => '100'
+    },
     promotable      => true,
     require         => Cs_primitive['ca_service'],
   }
