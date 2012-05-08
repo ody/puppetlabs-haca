@@ -66,7 +66,7 @@ class haca::primary {
   # Haven't been able to track down why Corosync won't
   # add two properties in rapid succession.
   exec { 'sleep_between_cs_property':
-    command     => 'sleep 10',
+    command     => 'sleep 30',
     path        => ['/bin', '/usr/bin' ],
     refreshonly => true,
     subscribe   => Cs_property['stonith-enabled'],
