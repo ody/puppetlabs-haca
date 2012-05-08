@@ -45,10 +45,10 @@ class haca::secondary {
     notify  => Service[$stunnel::data::service],
   }
   stunnel::tun { 'rsync':
-    certificate => "/etc/puppet/ssl/certs/${::clientcert}.pem",
-    private_key => "/etc/puppet/ssl/private_keys/${::clientcert}.pem",
-    ca_file     => '/etc/puppet/ssl/certs/ca.pem',
-    crl_file    => '/etc/puppet/ssl/crl.pem',
+    certificate => "/var/lib/puppet/ssl/certs/${::clientcert}.pem",
+    private_key => "/var/lib/puppet/ssl/private_keys/${::clientcert}.pem",
+    ca_file     => '/var/lib/puppet/ssl/certs/ca.pem',
+    crl_file    => '/var/lib/puppet/ssl/crl.pem',
     chroot      => '/var/lib/stunnel4/rsync',
     user        => 'puppet',
     group       => 'puppet',

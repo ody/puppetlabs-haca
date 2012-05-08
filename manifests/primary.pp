@@ -45,10 +45,10 @@ class haca::primary {
     notify  => Service[$stunnel::data::service],
   }
   stunnel::tun { 'rsyncd':
-    certificate => "/etc/puppet/ssl/certs/${::clientcert}.pem",
-    private_key => "/etc/puppet/ssl/private_keys/${::clientcert}.pem",
-    ca_file     => '/etc/puppet/ssl/certs/ca.pem',
-    crl_file    => '/etc/puppet/ssl/crl.pem',
+    certificate => "/var/lib/puppet/ssl/certs/${::clientcert}.pem",
+    private_key => "/var/lib/puppet/ssl/private_keys/${::clientcert}.pem",
+    ca_file     => '/var/lib/puppet/ssl/certs/ca.pem',
+    crl_file    => '/var/lib/puppet/ssl/crl.pem',
     chroot      => '/var/lib/stunnel4/rsyncd',
     user        => 'puppet',
     group       => 'puppet',
@@ -102,7 +102,7 @@ class haca::primary {
     require         => Cs_primitive['ca_service'],
   }
 
-  cs_colocation { 'ca_vip_ca_service':
+  cs_colocation { 'ca_vip_with_ca_service':
     primitives => [ 'ca_vip', 'ca_service' ],
     require    => Cs_primitive[[ 'ca_service', 'ca_vip' ]],
   }
@@ -111,7 +111,7 @@ class haca::primary {
     second  => 'ca_service',
     require => Cs_colocation['ca_vip_ca_service'],
   }
-  cs_colocation { 'ms_kicker_ca_service':
+  cs_colocation { 'ms_kicker_with_ca_service':
     primitives => [ 'ms_kicker', 'ca_service' ],
     require     => Cs_primitive[[ 'ca_service', 'kicker' ]],
   }
