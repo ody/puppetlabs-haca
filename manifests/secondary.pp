@@ -1,4 +1,4 @@
-# == Class: haca
+# == Class: haca::secondary
 #
 # Full description of class haca here.
 #
@@ -37,4 +37,34 @@
 #
 class haca::secondary {
 
+  # Setup stunnel for authentication and encryption of our sensitive certificate
+  # authority data.
+  include stunnel
+  Stunnel::Tun {
+    require => Package[$stunnel::data::package],
+    notify  => Service[$stunnel::data::service],
+  }
+  stunnel::tun { 'rsync':
+    certificate => "/etc/puppet/ssl/certs/${::clientcert}.pem",
+    private_key => "/etc/puppet/ssl/private_keys/${::clientcert}.pem",
+    ca_file     => '/etc/puppet/ssl/certs/ca.pem',
+    crl_file    => '/etc/puppet/ssl/crl.pem',
+    chroot      => '/var/lib/stunnel4/rsync',
+    user        => 'puppet',
+    group       => 'puppet',
+    client      => true,
+    accept      => '873',
+    connect     => "${pe_master}:1873",
+  }
+
+  # Install and enable Corosync configuration for VIP and Apache management.
+  class { 'corosync':
+    enable_secauth    => true,
+    bind_address      => '0.0.0.0',
+    multicast_address => '239.1.1.2',
+  }
+  corosync::service { 'pacemaker':
+    version => '0',
+    notify  => Service['corosync'],
+  }
 }

@@ -45,12 +45,16 @@ class haca::primary {
     notify  => Service[$stunnel::data::service],
   }
   stunnel::tun { 'rsyncd':
-    chroot  => '/var/lib/stunnel4/rsyncd',
-    user    => 'pe-puppet',
-    group   => 'pe-puppet',
-    client  => false,
-    accept  => '1873',
-    connect => '873',
+    certificate => "/etc/puppet/ssl/certs/${::clientcert}.pem",
+    private_key => "/etc/puppet/ssl/private_keys/${::clientcert}.pem",
+    ca_file     => '/etc/puppet/ssl/certs/ca.pem',
+    crl_file    => '/etc/puppet/ssl/crl.pem',
+    chroot      => '/var/lib/stunnel4/rsyncd',
+    user        => 'puppet',
+    group       => 'puppet',
+    client      => false,
+    accept      => '1873',
+    connect     => '873',
   }
 
   # Install and enable Corosync configuration for VIP and Apache management.
@@ -85,31 +89,42 @@ class haca::primary {
   }
   # I really really wished we used symlinks a la debian in PE so a could more
   # easily select what I wanted to run on a specific machine.
-  cs_primitive { 'pe_ca_service':
+  cs_primitive { 'ca_service':
     primitive_class => 'lsb',
-    primitive_type  => 'pe-httpd',
+    primitive_type  => 'apache2',
     provided_by     => 'heartbeat',
     operations      => { 'monitor' => { 'interval' => '10s' } },
     require         => Cs_primitive['ca_vip'],
   }
 
   # This is mostly a dummy primitive that kicks puppet for us.
-  cs_primitive { 'the_kicker':
+  cs_primitive { 'kicker':
     primitive_class => 'ocf',
     primitive_type  => 'ppk',
     provided_by     => 'pacemaker',
     operations      => { 'monitor' => { 'interval' => '30s' } },
     metadata        => { 'target-role' => 'Master' },
+    promotable      => true,
+    require         => Cs_primitive['ca_service'],
   }
 
-  cs_colocation { 'vip_ca_service':
+  cs_colocation { 'ca_vip_ca_service':
     primitives => [ 'ca_vip', 'pe_ca_service' ],
     require    => Cs_primitive[[ 'pe_ca_service', 'ca_vip' ]],
   }
-  cs_order { 'vip_service':
+  cs_order { 'ca_vip_ca_service':
     first   => 'ca_vip',
-    second  => 'pe_ca_service',
-    require => Cs_colocation['vip_ca_service'],
+    second  => 'ca_service',
+    require => Cs_colocation['ca_vip_ca_service'],
+  }
+  cs_colocation { 'ms_kicker_ca_service':
+    primititves => [ 'ms_kicker', 'pe_ca_service' ],
+    require     => Cs_primitive[[ 'pe_ca_service', 'ms_kicker' ]],
+  }
+  cs_order { 'ms_kicker_ca_service':
+    frist   => 'ca_service',
+    second  => 'ms_kicker',
+    require => Cs_colocation['ms_kicker_ca_service'],
   }
 
   Cs_primitive['ca_vip'] -> Class['rsync::server']
@@ -118,12 +133,12 @@ class haca::primary {
   include rsync
   class { 'rsync::server': address => '172.16.210.100' }
   rsync::server::module { 'ca':
-    path           => '/etc/puppetlabs/puppet/ssl/ca',
+    path           => '/etc/puppet/ssl/ca',
     read_only      => true,
     write_only     => false,
     list           => true,
-    uid            => 'pe-puppet',
-    gid            => 'pe-puppet',
+    uid            => 'puppet',
+    gid            => 'puppet',
     incoming_chmod => false,
     outgoing_chmod => false,
     lock_file      => '/var/run/rsyncd.lock',
