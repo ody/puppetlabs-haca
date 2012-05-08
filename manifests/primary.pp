@@ -109,7 +109,7 @@ class haca::primary {
   }
   cs_colocation { 'ms_kicker_ca_service':
     primitives => [ 'ms_kicker', 'ca_service' ],
-    require     => Cs_primitive[[ 'ca_service', 'ms_kicker' ]],
+    require     => Cs_primitive[[ 'ca_service', 'kicker' ]],
   }
   cs_order { 'ms_kicker_ca_service':
     first   => 'ca_service',
