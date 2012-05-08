@@ -109,7 +109,7 @@ class haca::primary {
   cs_order { 'ca_vip_ca_service':
     first   => 'ca_vip',
     second  => 'ca_service',
-    require => Cs_colocation['ca_vip_ca_service'],
+    require => Cs_colocation['ca_vip_with_ca_service'],
   }
   cs_colocation { 'ms_kicker_with_ca_service':
     primitives => [ 'ms_kicker', 'ca_service' ],
@@ -118,7 +118,7 @@ class haca::primary {
   cs_order { 'ms_kicker_ca_service':
     first   => 'ca_service',
     second  => 'ms_kicker',
-    require => Cs_colocation['ms_kicker_ca_service'],
+    require => Cs_colocation['ms_kicker_with_ca_service'],
   }
 
   Cs_primitive['ca_vip'] -> Class['rsync::server']
