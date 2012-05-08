@@ -65,7 +65,10 @@ class haca::primary {
 
   cs_property { 'no-quorum-policy':
     value   => 'ignore',
-    require => Corosync::Service['pacemaker'],
+    require => [
+      Corosync::Service['pacemaker'],
+      Cs_property['stonith-enabled']
+    ]
   }
 
   Cs_primitive { metadata => { 'resource-stickiness' => '100' } }
@@ -106,7 +109,7 @@ class haca::primary {
     primitives => [ 'ca_vip', 'ca_service' ],
     require    => Cs_primitive[[ 'ca_service', 'ca_vip' ]],
   }
-  cs_order { 'ca_vip_ca_service':
+  cs_order { 'ca_vip_then_ca_service':
     first   => 'ca_vip',
     second  => 'ca_service',
     require => Cs_colocation['ca_vip_with_ca_service'],
@@ -115,7 +118,7 @@ class haca::primary {
     primitives => [ 'ms_kicker', 'ca_service' ],
     require     => Cs_primitive[[ 'ca_service', 'kicker' ]],
   }
-  cs_order { 'ms_kicker_ca_service':
+  cs_order { 'ca_service_then_ms_kicker':
     first   => 'ca_service',
     second  => 'ms_kicker',
     require => Cs_colocation['ms_kicker_with_ca_service'],
