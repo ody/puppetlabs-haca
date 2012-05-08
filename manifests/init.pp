@@ -37,6 +37,18 @@
 #
 class haca {
 
+  # Install and enable Corosync configuration.
+  class { 'corosync':
+    enable_secauth    => true,
+    bind_address      => '0.0.0.0',
+    multicast_address => '239.1.1.2',
+    authkey           => '/var/lib/puppet/ssl/certs/ca.pem',
+  }
+  corosync::service { 'pacemaker':
+    version => '0',
+    notify  => Service['corosync'],
+  }
+
   if $::ca_master == $::clientcert {
     include haca::primary
   } else {
