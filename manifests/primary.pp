@@ -117,7 +117,7 @@ class haca::primary {
   include rsync
   class { 'rsync::server': address => '127.0.0.1' }
   rsync::server::module { 'ca':
-    path           => '/etc/puppet/ssl/ca',
+    path           => '/var/lib/puppet/ssl/ca',
     read_only      => true,
     write_only     => false,
     list           => true,
