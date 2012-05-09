@@ -54,7 +54,7 @@ class haca::secondary {
     group       => 'puppet',
     client      => true,
     accept      => '873',
-    connect     => "${pe_master}:1873",
+    connect     => "${ca_master}:1873",
   }
 
   package { 'rsync': ensure => present }
