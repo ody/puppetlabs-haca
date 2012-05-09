@@ -115,7 +115,7 @@ class haca::primary {
 
   # Set up our rsync module for obtaining the certifate athority data.
   include rsync
-  class { 'rsync::server': address => '172.16.210.100' }
+  class { 'rsync::server': address => '127.0.0.1' }
   rsync::server::module { 'ca':
     path           => '/etc/puppet/ssl/ca',
     read_only      => true,
