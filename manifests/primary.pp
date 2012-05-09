@@ -130,7 +130,7 @@ class haca::primary {
   }
 
   cron { 'pull_ca':
-    command => '/usr/bin/rsync -avzPH rsync://localhost/ca /var/lib/puppet/ssl',
+    command => '/usr/bin/rsync -avzPH rsync://localhost/ca /var/lib/puppet/ssl/ca',
     ensure  => absent,
   }
 }
