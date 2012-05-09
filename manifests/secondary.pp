@@ -57,4 +57,10 @@ class haca::secondary {
     connect     => "${pe_master}:1873",
   }
 
+  package { 'rsync': ensure => present }
+
+  cron { 'pull_ca':
+    command => 'rsync -avzPH rsync://localhost/ca /var/lib/puppet/ssl',
+    minute  => '*',
+  }
 }
