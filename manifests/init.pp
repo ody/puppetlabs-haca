@@ -48,6 +48,18 @@ class haca {
     version => '0',
     notify  => Service['corosync'],
   }
+  # Install and enable Corosync configuration for VIP and Apache management.
+  cs_property { 'stonith-enabled':
+    value   => 'false',
+    require => Corosync::Service['pacemaker'],
+  }
+
+  cs_property { 'no-quorum-policy':
+    value   => 'ignore',
+    require => [
+      Corosync::Service['pacemaker'],
+    ]
+  }
 
   if $::ca_master == $::clientcert {
     include haca::primary
