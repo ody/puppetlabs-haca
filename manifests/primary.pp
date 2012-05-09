@@ -128,4 +128,9 @@ class haca::primary {
     lock_file      => '/var/run/rsyncd.lock',
     notify         => Service['rsync'],
   }
+
+  cron { 'pull_ca':
+    command => '/usr/bin/rsync -avzPH rsync://localhost/ca /var/lib/puppet/ssl',
+    ensure  => absent,
+  }
 }

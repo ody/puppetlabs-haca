@@ -5,7 +5,7 @@
 # === Parameters
 #
 # Document parameters here.
-
+#
 # [*sample_parameter*]
 #   Explanation of what this parameter affects and what it defaults to.
 #   e.g. "Specify one or more upstream ntp servers as an array."
@@ -48,7 +48,7 @@ class haca {
     version => '0',
     notify  => Service['corosync'],
   }
-  # Install and enable Corosync configuration for VIP and Apache management.
+
   cs_property { 'stonith-enabled':
     value   => 'false',
     require => Corosync::Service['pacemaker'],
