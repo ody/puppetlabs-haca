@@ -83,7 +83,10 @@ class haca::primary {
     primitive_class => 'lsb',
     primitive_type  => 'apache2',
     provided_by     => 'heartbeat',
-    operations      => { 'monitor' => { 'interval' => '10s' } },
+    operations      => {
+      'monitor' => { 'interval' => '10s', 'timeout' => '30s' },
+      'start'   => { 'timeout'  => '30s', 'on-fail' => 'restart' }
+    },
     require         => Cs_primitive['ca_vip'],
   }
 
