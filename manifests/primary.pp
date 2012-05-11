@@ -55,6 +55,7 @@ class haca::primary {
     client      => false,
     accept      => '1873',
     connect     => '873',
+    subscribe   => Rsync::Server::Module['ca']
   }
 
   cs_property { 'stonith-enabled':
@@ -138,6 +139,7 @@ class haca::primary {
     incoming_chmod => false,
     outgoing_chmod => false,
     lock_file      => '/var/run/rsyncd.lock',
+
   }
 
   cron { 'pull_ca':
