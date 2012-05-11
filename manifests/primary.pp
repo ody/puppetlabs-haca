@@ -57,6 +57,15 @@ class haca::primary {
     connect     => '873',
   }
 
+  cs_property { 'stonith-enabled':
+    value   => 'false',
+    require => Class['corosync'],
+  }
+
+  cs_property { 'no-quorum-policy':
+    value   => 'ignore',
+    require => Class['corosync'],
+  }
 
   Cs_primitive { metadata => { 'resource-stickiness' => '100' } }
 

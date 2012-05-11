@@ -49,23 +49,16 @@ class haca {
     notify  => Service['corosync'],
   }
 
-  cs_property { 'stonith-enabled':
-    value   => 'false',
-    require => Corosync::Service['pacemaker'],
-  }
-
-  cs_property { 'no-quorum-policy':
-    value   => 'ignore',
-    require => [
-      Corosync::Service['pacemaker'],
-    ]
-  }
-
   service { 'apache2': enable => false }
-
-  if $::ca_master == $::clientcert {
-    include haca::primary
+  if $::ca_master {
+    if $::ca_master == $::clientcert {
+      include haca::primary
+    } else {
+      include haca::secondary
+    }
   } else {
-    include haca::secondary
+    notify { 'skipping':
+      message => 'No cluster master has been elected so we are skipping resource management dependant on that relationship being established.  If you are setting up for the first time or just wish to temporarily override you can do some by prepending the puppet agent command with FACTER_ca_master=$desired_master_node'
+    }
   }
 }
