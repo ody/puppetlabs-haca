@@ -59,6 +59,12 @@ class haca::secondary {
 
   package { 'rsync': ensure => present }
 
+  include rsync
+  class { 'rsync::server':
+    address => '127.0.0.1',
+    enabled => false,
+  }
+
   cron { 'pull_ca':
     command => '/usr/bin/rsync -avzPH --delete rsync://localhost/ca /var/lib/puppet/ssl/ca',
     minute  => '*',
