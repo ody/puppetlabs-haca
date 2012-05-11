@@ -126,7 +126,6 @@ class haca::primary {
     incoming_chmod => false,
     outgoing_chmod => false,
     lock_file      => '/var/run/rsyncd.lock',
-    notify         => Service['rsync'],
   }
 
   cron { 'pull_ca':

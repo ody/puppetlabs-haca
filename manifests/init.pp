@@ -61,6 +61,8 @@ class haca {
     ]
   }
 
+  service { 'apache2': enable => false }
+
   if $::ca_master == $::clientcert {
     include haca::primary
   } else {
