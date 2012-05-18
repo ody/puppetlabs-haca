@@ -112,7 +112,10 @@ class haca::primary {
     primitive_class => 'ocf',
     primitive_type  => 'ppk',
     provided_by     => 'pacemaker',
-    operations      => { 'start' => { 'interval' => '0', 'timeout' => '600s' } },
+    operations      => {
+      'start' => { 'interval' => '0', 'timeout' => '600s' },
+      'stop'  => { 'interval' => '0', 'timeout' => '600s' }
+    },
     require         => Cs_primitive['ca_data'],
   }
 
