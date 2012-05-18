@@ -51,10 +51,16 @@ class haca {
 
   service { 'apache2': enable => false }
   if $::ca_master {
-    if ($::ca_master == $::clientcert) or $::ms_override == 'master' {
-      include haca::primary
-    } else {
-      include haca::secondary
+    case $::ms_override {
+      'master': { include haca::primary }
+      'slave': { include haca::secondary}
+      default: {
+        if $::ca_master == $::clientcert {
+          include haca::primary
+        } else {
+          include haca::secondary
+        }
+      }
     }
   } else {
     notify { 'skipping':
