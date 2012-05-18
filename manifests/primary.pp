@@ -92,10 +92,10 @@ class haca::primary {
     require         => Cs_primitive['ca_vip'],
   }
 
-  # This is mostly a dummy primitive that kicks puppet for us.
-  cs_primitive { 'kicker':
+  # This is a dummy primititive that set some data for us.
+  cs_primitive { 'ca_data':
     primitive_class => 'ocf',
-    primitive_type  => 'ppk',
+    primitive_type  => 'ppdata',
     provided_by     => 'pacemaker',
     operations      => { 'monitor' => { 'interval' => '30s' } },
     metadata        => {
@@ -104,6 +104,15 @@ class haca::primary {
     },
     promotable      => true,
     require         => Cs_primitive['ca_service'],
+  }
+
+  # This is a dummy primitive that kicks puppet for us.
+  cs_primitive { 'puppet_kicker':
+    primitive_class => 'ocf',
+    primitive_type  => 'ppk',
+    provided_by     => 'pacemaker',
+    operations      => { 'start' => { 'timeout' => '600s' } },
+    require         => Cs_primitive['ca_data'],
   }
 
   cs_colocation { 'ca_vip_with_ca_service':
@@ -115,14 +124,23 @@ class haca::primary {
     second  => 'ca_service',
     require => Cs_colocation['ca_vip_with_ca_service'],
   }
-  cs_colocation { 'ms_kicker_with_ca_service':
-    primitives => [ 'ms_kicker', 'ca_service' ],
-    require     => Cs_primitive[[ 'ca_service', 'kicker' ]],
+  cs_colocation { 'ms_ca_data_with_ca_service':
+    primitives => [ 'ms_ca_data', 'ca_service' ],
+    require     => Cs_primitive[[ 'ca_service', 'ca_data' ]],
   }
-  cs_order { 'ca_service_then_ms_kicker':
+  cs_order { 'ca_service_then_ms_ca_data':
     first   => 'ca_service',
-    second  => 'ms_kicker',
-    require => Cs_colocation['ms_kicker_with_ca_service'],
+    second  => 'ms_ca_data',
+    require => Cs_colocation['ms_ca_data_with_ca_service'],
+  }
+  cs_colocation { 'puppet_kicker_with_ms_ca_data':
+    primitives => [ 'puppet_kicker', 'ms_ca_data' ],
+    require     => Cs_primitive[[ 'ca_data', 'puppet_kicker' ]],
+  }
+  cs_order { 'ms_ca_data_then_puppet_kicker':
+    first   => 'ms_ca_data',
+    second  => 'puppet_kicker',
+    require => Cs_colocation['puppet_kicker_with_ms_ca_data'],
   }
 
   Cs_primitive['ca_vip'] -> Class['rsync::server']
