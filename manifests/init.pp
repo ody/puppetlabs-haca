@@ -51,7 +51,7 @@ class haca {
 
   service { 'apache2': enable => false }
   if $::ca_master {
-    if $::ca_master == $::clientcert {
+    if ($::ca_master == $::clientcert) or $::ms_override == 'master' {
       include haca::primary
     } else {
       include haca::secondary
