@@ -87,6 +87,7 @@ class haca::primary {
       'monitor' => { 'interval' => '10s', 'timeout' => '30s' },
       'start'   => { 'timeout' => '30s', 'on-fail' => 'restart' }
     },
+    parameters      => { 'configfile' => '/etc/apache2/apache2.conf' },
     require         => Cs_primitive['ca_vip'],
   }
 
