@@ -49,6 +49,8 @@ class haca {
     notify  => Service['corosync'],
   }
 
+  Service <| tilte == 'xinetd' |> { restart => undef }
+
   service { 'apache2': enable => false }
   if $::ca_master {
     if $::ca_master == $::clientcert {
