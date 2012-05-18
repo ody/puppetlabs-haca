@@ -86,7 +86,7 @@ class haca::primary {
     provided_by     => 'heartbeat',
     operations      => {
       'monitor' => { 'interval' => '10s', 'timeout' => '30s' },
-      'start'   => { 'timeout' => '30s', 'on-fail' => 'restart' }
+      'start'   => { 'interval' => '0', 'timeout' => '30s', 'on-fail' => 'restart' }
     },
     parameters      => { 'configfile' => '/etc/apache2/apache2.conf' },
     require         => Cs_primitive['ca_vip'],
@@ -111,7 +111,7 @@ class haca::primary {
     primitive_class => 'ocf',
     primitive_type  => 'ppk',
     provided_by     => 'pacemaker',
-    operations      => { 'start' => { 'timeout' => '600s' } },
+    operations      => { 'start' => { 'interval' => '0', 'timeout' => '600s' } },
     require         => Cs_primitive['ca_data'],
   }
 
