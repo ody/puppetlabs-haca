@@ -59,8 +59,9 @@ class haca::secondary {
 
   include rsync
   class { 'rsync::server':
-    address => '127.0.0.1',
-    enable  => false,
+    address    => '127.0.0.1',
+    enable     => false,
+    use_xinetd => false,
   }
 
   Class['rsync::server'] -> Class['stunnel']
