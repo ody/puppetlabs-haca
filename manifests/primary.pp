@@ -80,12 +80,12 @@ class haca::primary {
   # I really really wished we used symlinks a la debian in PE so a could more
   # easily select what I wanted to run on a specific machine.
   cs_primitive { 'ca_service':
-    primitive_class => 'lsb',
-    primitive_type  => 'apache2',
+    primitive_class => 'ocf',
+    primitive_type  => 'apache',
     provided_by     => 'heartbeat',
     operations      => {
       'monitor' => { 'interval' => '10s', 'timeout' => '30s' },
-      'start'   => { 'timeout'  => '30s', 'on-fail' => 'restart' }
+      'start'   => { 'timeout' => '30s', 'on-fail' => 'restart' }
     },
     require         => Cs_primitive['ca_vip'],
   }
