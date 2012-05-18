@@ -49,7 +49,7 @@ class haca {
     notify  => Service['corosync'],
   }
 
-  Service <| title == 'xinetd' |> { restart => undef }
+  Service <| title == 'xinetd' |> { restart => '/etc/init.d/xinetd restart && sleep 1 && /etc/init.d/xinetd restart' }
 
   service { 'apache2': enable => false }
   if $::ca_master {
