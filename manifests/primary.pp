@@ -58,6 +58,10 @@ class haca::primary {
     subscribe   => Rsync::Server::Module['ca'],
   }
 
+  Cs_primitive { before => Class['rsync::server'], metadata => { 'resource-stickiness' => '100' } }
+  Cs_order { before => Class['rsync::server'] }
+  Cs_colocation { before => Class['rsync::server'] }
+
   cs_property { 'stonith-enabled':
     value   => 'false',
     require => Class['corosync'],
@@ -67,8 +71,6 @@ class haca::primary {
     value   => 'ignore',
     require => Class['corosync'],
   }
-
-  Cs_primitive { metadata => { 'resource-stickiness' => '100' } }
 
   cs_primitive { 'ca_vip':
     primitive_class => 'ocf',
@@ -143,7 +145,6 @@ class haca::primary {
     require => Cs_colocation['puppet_kicker_with_ms_ca_data'],
   }
 
-  Cs_primitive['ca_vip'] -> Class['rsync::server']
 
   # Set up our rsync module for obtaining the certifate athority data.
   include rsync
