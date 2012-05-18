@@ -55,7 +55,6 @@ class haca::primary {
     client      => false,
     accept      => '1873',
     connect     => '873',
-    subscribe   => Rsync::Server::Module['ca'],
   }
 
   Cs_primitive { before => Class['rsync::server'], metadata => { 'resource-stickiness' => '100' } }
@@ -159,6 +158,7 @@ class haca::primary {
     incoming_chmod => false,
     outgoing_chmod => false,
     lock_file      => '/var/run/rsyncd.lock',
+    subscribe      => Stunnel::Tun['rsyncd']
   }
 
   cron { 'pull_ca':
